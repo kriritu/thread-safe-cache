@@ -1,0 +1,12 @@
+hardware threads: 12 | capacity=4096 keys=8192 mix=80% get/20% put | ops/thread=500000 | median of 3
+
+Throughput in million ops/sec (higher is better)
+
+| Implementation             |  1 thr   |  2 thr   |  4 thr   |  8 thr   |
+|----------------------------|----------|----------|----------|----------|
+| LRU shared_mutex           |    12.78 |     2.95 |     2.28 |     1.59 |
+| LFU shared_mutex           |     9.21 |     2.79 |     2.10 |     1.31 |
+| LRU sharded (16)           |     9.23 |     5.46 |     7.42 |     6.76 |
+| LFU sharded (16)           |     7.43 |     5.84 |     6.63 |     4.87 |
+
+Target: >= 1.00 Mops/s
