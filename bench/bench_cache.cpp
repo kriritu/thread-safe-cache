@@ -41,7 +41,7 @@ double run_once(CacheT& cache, int threads, std::size_t ops_per_thread) {
         auto& v = ops[static_cast<std::size_t>(t)];
         v.reserve(ops_per_thread);
         for (std::size_t i = 0; i < ops_per_thread; ++i) {
-            v.push_back(Op{rng() % kKeyRange, (rng() % 100) < kPutPercent});
+            v.push_back(Op{static_cast<std::uint32_t>(rng() % kKeyRange), (rng() % 100) < kPutPercent});
         }
     }
 

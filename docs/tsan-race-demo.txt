@@ -1,0 +1,61 @@
+==================
+WARNING: ThreadSanitizer: data race (pid=3701)
+  Read of size 8 at 0x720800000158 by thread T2 (mutexes: read M0):
+    #0 cache::LFUCache<int, int>::touch(std::_List_iterator<cache::LFUCache<int, int>::Entry>) /home/ritu/thread-safe-cache/include/cache/lfu_cache.hpp:78 (tsan_race_demo+0x29f9) (BuildId: 1693deea87afddb490c498f83d1332ae5bb669dd)
+    #1 cache::LFUCache<int, int>::get(int const&) /home/ritu/thread-safe-cache/include/cache/lfu_cache.hpp:27 (tsan_race_demo+0x29f9)
+    #2 BrokenCache::get(int) /home/ritu/thread-safe-cache/tests/tsan_race_demo.cpp:24 (tsan_race_demo+0x29f9)
+    #3 operator() /home/ritu/thread-safe-cache/tests/tsan_race_demo.cpp:40 (tsan_race_demo+0x29f9)
+    #4 __invoke_impl<void, main()::<lambda()> > /usr/include/c++/15/bits/invoke.h:63 (tsan_race_demo+0x2aec) (BuildId: 1693deea87afddb490c498f83d1332ae5bb669dd)
+    #5 __invoke<main()::<lambda()> > /usr/include/c++/15/bits/invoke.h:98 (tsan_race_demo+0x2aec)
+    #6 _M_invoke<0> /usr/include/c++/15/bits/std_thread.h:303 (tsan_race_demo+0x2aec)
+    #7 operator() /usr/include/c++/15/bits/std_thread.h:310 (tsan_race_demo+0x2aec)
+    #8 _M_run /usr/include/c++/15/bits/std_thread.h:255 (tsan_race_demo+0x2aec)
+    #9 <null> <null> (libstdc++.so.6+0xf5ef8) (BuildId: 3a7a8c6bd922e6314edb7a710fdc0293265c2c42)
+
+  Previous write of size 8 at 0x720800000158 by thread T1 (mutexes: read M0):
+    #0 cache::LFUCache<int, int>::touch(std::_List_iterator<cache::LFUCache<int, int>::Entry>) /home/ritu/thread-safe-cache/include/cache/lfu_cache.hpp:85 (tsan_race_demo+0x2908) (BuildId: 1693deea87afddb490c498f83d1332ae5bb669dd)
+    #1 cache::LFUCache<int, int>::get(int const&) /home/ritu/thread-safe-cache/include/cache/lfu_cache.hpp:27 (tsan_race_demo+0x2908)
+    #2 BrokenCache::get(int) /home/ritu/thread-safe-cache/tests/tsan_race_demo.cpp:24 (tsan_race_demo+0x2908)
+    #3 operator() /home/ritu/thread-safe-cache/tests/tsan_race_demo.cpp:40 (tsan_race_demo+0x2908)
+    #4 __invoke_impl<void, main()::<lambda()> > /usr/include/c++/15/bits/invoke.h:63 (tsan_race_demo+0x2aec) (BuildId: 1693deea87afddb490c498f83d1332ae5bb669dd)
+    #5 __invoke<main()::<lambda()> > /usr/include/c++/15/bits/invoke.h:98 (tsan_race_demo+0x2aec)
+    #6 _M_invoke<0> /usr/include/c++/15/bits/std_thread.h:303 (tsan_race_demo+0x2aec)
+    #7 operator() /usr/include/c++/15/bits/std_thread.h:310 (tsan_race_demo+0x2aec)
+    #8 _M_run /usr/include/c++/15/bits/std_thread.h:255 (tsan_race_demo+0x2aec)
+    #9 <null> <null> (libstdc++.so.6+0xf5ef8) (BuildId: 3a7a8c6bd922e6314edb7a710fdc0293265c2c42)
+
+  Location is heap block of size 32 at 0x720800000140 allocated by main thread:
+    #0 operator new(unsigned long) ../../../../src/libsanitizer/tsan/tsan_new_delete.cpp:64 (libtsan.so.2+0xaba12) (BuildId: 66d37dc704b813df6c813b77217284deb43a0042)
+    #1 std::__new_allocator<std::_List_node<cache::LFUCache<int, int>::Entry> >::allocate(unsigned long, void const*) /usr/include/c++/15/bits/new_allocator.h:151 (tsan_race_demo+0x2f3b) (BuildId: 1693deea87afddb490c498f83d1332ae5bb669dd)
+    #2 std::allocator_traits<std::allocator<std::_List_node<cache::LFUCache<int, int>::Entry> > >::allocate(std::allocator<std::_List_node<cache::LFUCache<int, int>::Entry> >&, unsigned long) /usr/include/c++/15/bits/alloc_traits.h:614 (tsan_race_demo+0x2f3b)
+    #3 std::__allocated_ptr<std::allocator<std::_List_node<cache::LFUCache<int, int>::Entry> > > std::__allocate_guarded<std::allocator<std::_List_node<cache::LFUCache<int, int>::Entry> > >(std::allocator<std::_List_node<cache::LFUCache<int, int>::Entry> >&) /usr/include/c++/15/bits/allocated_ptr.h:102 (tsan_race_demo+0x2f3b)
+    #4 std::__allocated_obj<std::allocator<std::_List_node<cache::LFUCache<int, int>::Entry> > > std::__allocate_guarded_obj<std::allocator<std::_List_node<cache::LFUCache<int, int>::Entry> > >(std::allocator<std::_List_node<cache::LFUCache<int, int>::Entry> >&) /usr/include/c++/15/bits/allocated_ptr.h:136 (tsan_race_demo+0x2f3b)
+    #5 std::_List_node<cache::LFUCache<int, int>::Entry>* std::__cxx11::list<cache::LFUCache<int, int>::Entry, std::allocator<cache::LFUCache<int, int>::Entry> >::_M_create_node<cache::LFUCache<int, int>::Entry>(cache::LFUCache<int, int>::Entry&&) /usr/include/c++/15/bits/stl_list.h:1105 (tsan_race_demo+0x2f3b)
+    #6 void std::__cxx11::list<cache::LFUCache<int, int>::Entry, std::allocator<cache::LFUCache<int, int>::Entry> >::_M_insert<cache::LFUCache<int, int>::Entry>(std::_List_iterator<cache::LFUCache<int, int>::Entry>, cache::LFUCache<int, int>::Entry&&) /usr/include/c++/15/bits/stl_list.h:2472 (tsan_race_demo+0x2f3b)
+    #7 std::__cxx11::list<cache::LFUCache<int, int>::Entry, std::allocator<cache::LFUCache<int, int>::Entry> >::push_front(cache::LFUCache<int, int>::Entry&&) /usr/include/c++/15/bits/stl_list.h:1712 (tsan_race_demo+0x2f3b)
+    #8 cache::LFUCache<int, int>::put(int const&, int) /home/ritu/thread-safe-cache/include/cache/lfu_cache.hpp:45 (tsan_race_demo+0x2f3b)
+    #9 BrokenCache::put(int, int) /home/ritu/thread-safe-cache/tests/tsan_race_demo.cpp:28 (tsan_race_demo+0x2f3b)
+    #10 main /home/ritu/thread-safe-cache/tests/tsan_race_demo.cpp:34 (tsan_race_demo+0x2f3b)
+
+  Mutex M0 (0x7fffffffda20) created at:
+    #0 pthread_rwlock_wrlock ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1605 (libtsan.so.2+0x5b17a) (BuildId: 66d37dc704b813df6c813b77217284deb43a0042)
+    #1 std::__glibcxx_rwlock_wrlock(pthread_rwlock_t*) /usr/include/c++/15/shared_mutex:87 (tsan_race_demo+0x2ff7) (BuildId: 1693deea87afddb490c498f83d1332ae5bb669dd)
+    #2 std::__shared_mutex_pthread::lock() /usr/include/c++/15/shared_mutex:200 (tsan_race_demo+0x2ff7)
+    #3 std::shared_mutex::lock() /usr/include/c++/15/shared_mutex:427 (tsan_race_demo+0x2ff7)
+    #4 std::unique_lock<std::shared_mutex>::lock() /usr/include/c++/15/bits/unique_lock.h:144 (tsan_race_demo+0x2ff7)
+    #5 std::unique_lock<std::shared_mutex>::unique_lock(std::shared_mutex&) /usr/include/c++/15/bits/unique_lock.h:75 (tsan_race_demo+0x2ff7)
+    #6 BrokenCache::put(int, int) /home/ritu/thread-safe-cache/tests/tsan_race_demo.cpp:27 (tsan_race_demo+0x2ff7)
+    #7 main /home/ritu/thread-safe-cache/tests/tsan_race_demo.cpp:34 (tsan_race_demo+0x2ff7)
+
+  Thread T2 (tid=3704, running) created by main thread at:
+    #0 pthread_create ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1078 (libtsan.so.2+0x5cb02) (BuildId: 66d37dc704b813df6c813b77217284deb43a0042)
+    #1 std::thread::_M_start_thread(std::unique_ptr<std::thread::_State, std::default_delete<std::thread::_State> >, void (*)()) <null> (libstdc++.so.6+0xf5ff0) (BuildId: 3a7a8c6bd922e6314edb7a710fdc0293265c2c42)
+    #2 __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:59 (libc.so.6+0x2a600) (BuildId: 240c8909736b31f963346aca80667fd00c551e32)
+
+  Thread T1 (tid=3703, running) created by main thread at:
+    #0 pthread_create ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1078 (libtsan.so.2+0x5cb02) (BuildId: 66d37dc704b813df6c813b77217284deb43a0042)
+    #1 std::thread::_M_start_thread(std::unique_ptr<std::thread::_State, std::default_delete<std::thread::_State> >, void (*)()) <null> (libstdc++.so.6+0xf5ff0) (BuildId: 3a7a8c6bd922e6314edb7a710fdc0293265c2c42)
+    #2 __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:59 (libc.so.6+0x2a600) (BuildId: 240c8909736b31f963346aca80667fd00c551e32)
+
+SUMMARY: ThreadSanitizer: data race /home/ritu/thread-safe-cache/include/cache/lfu_cache.hpp:78 in cache::LFUCache<int, int>::touch(std::_List_iterator<cache::LFUCache<int, int>::Entry>)
+==================
